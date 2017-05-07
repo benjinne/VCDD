@@ -45,7 +45,9 @@ All work seen in here has been copied, but modified from the Library example -->
 	   		</c:if>
 	    </c:if>
 	   	<c:if test="${admin}">
-				<p>View all user activity: <button type="submit" class="btn btn-primary active" name="viewTransactions">All Transactions</button></p>
+				<p>View all user activity: <button type="submit" class="btn btn-primary active" name="viewTransactions">
+				All Transactions <span class="glyphicon glyphicon-signal"></span>
+				</button></p>
 		</c:if>
 	  </div>
 			<div>
