@@ -13,7 +13,7 @@ document.write('\
     <!-- Collection of nav links and other content for toggling -->\
 	    <div id="navbarCollapse" class="collapse navbar-collapse">\
 	        <ul class="nav navbar-nav">\
-	            <li><a href="/resistorSorter/Inventories">Home</a></li>\
+	            <li><a href="/resistorSorter/Inventories"><span class="glyphicon glyphicon-home"></span> Home</a></li>\
 	            <li><a href="/resistorSorter/Racks">Racks</a></li>\
 	            <li><a href="/resistorSorter/Bins">Bins</a></li>\
 	            <li><a href="/resistorSorter/Resistor">Resistor</a></li>\
