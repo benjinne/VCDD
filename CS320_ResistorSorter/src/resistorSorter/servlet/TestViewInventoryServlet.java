@@ -1,20 +1,16 @@
 package resistorSorter.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import resistorSorter.persist.DerbyDatabase;
-import resistorSorter.persist.DatabaseProvider;
-import resistorSorter.persist.IDatabase;
 import resistorSorter.controllers.BinController;
 import resistorSorter.controllers.InventoryController;
+import resistorSorter.controllers.InventoryTransactionController;
 import resistorSorter.controllers.LoginController;
 import resistorSorter.controllers.RackController;
 import resistorSorter.model.Bin;
@@ -25,6 +21,7 @@ public class TestViewInventoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private InventoryController inventoryController;
+	private InventoryTransactionController inventoryTransactionController;
 	private RackController rackController;
 	private BinController binController;
 	private LoginController loginController;
@@ -58,43 +55,21 @@ public class TestViewInventoryServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		//initialize inventoryTransactionController
+		inventoryTransactionController = new InventoryTransactionController("inventory");
+		
 		//initialize error to null
 		String error = null;
 		
 		//get email from session
 		email = (String) req.getSession().getAttribute("user");
 		
-		//if reset inventory is pressed
-		if (req.getParameter("resetInventory") != null) {
-			System.out.println(email);
-			if(!loginController.getAdminFlag(email)){
-				error = "Only admistrators can do that";
-			}
-			else{
-				DerbyDatabase.deleteDataBase();
-				DerbyDatabase.loadDataBase();
-			}
-		}
-		
+
 		//if logout is pressed
-		else if (req.getParameter("logout") != null ) {
-			
+		if (req.getParameter("logout") != null ) {
 			req.getSession().invalidate();
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
-		}
-		
-		//if populate tables is pressed
-		else if(req.getParameter("populateTables") != null){
-			if(!loginController.getAdminFlag(email)){
-				error = "Only admistrators can do that";
-			}
-			else if(inventoryController.getCountOfInventories() > 0){
-				error = "Cannot populate already existing inventory";
-			}
-			else{
-				populateTables((String) req.getSession().getAttribute("user"));
-			}
 		}
 		
 		//if initializeInventory is pressed
@@ -134,15 +109,32 @@ public class TestViewInventoryServlet extends HttpServlet {
 			int resistance = getInteger(req, "resistance");
 			int count = getInteger(req, "count");
 			error = binController.addBin(rack_id, resistance, count, email);	
-			System.out.println("rack_id= " + rack_id);
-			System.out.println("resistance= " + resistance);
-			System.out.println("count= " + count);
 		}
 		
 		//delete a bin
 		else if (req.getParameter("deleteBin") != null) {
 			int deleteBinID = getInteger(req, "deleteBin");
 			error = binController.removeBin(deleteBinID, email);
+		}
+		
+		//addResistors
+		else if (req.getParameter("addResistors") != null) {
+			int bin_id = getInteger(req, "bin_id");
+			int countChange = getInteger(req, "countChange");
+			error = binController.addResistor(bin_id, countChange);
+			if(error == null){
+				inventoryTransactionController.addTransaction(email, bin_id, countChange, true);
+			}
+		}
+		
+		//removeResistors
+		else if (req.getParameter("removeResistors") != null) {
+			int bin_id = getInteger(req, "bin_id");
+			int countChange = getInteger(req, "countChange");
+			error = binController.removeResistor(bin_id, countChange);
+			if(error == null){
+				inventoryTransactionController.addTransaction(email, bin_id, countChange, false);
+			}
 		}
 		
 		//send info to jsp
@@ -174,32 +166,6 @@ public class TestViewInventoryServlet extends HttpServlet {
 		//-1 used to display all bins regardless of rackID
 		List<Bin> bins = binController.displayBins(-1);
 		req.setAttribute("bins", bins);
-	}
-	
-	private void populateTables(String email){
-		inventoryController.addInventory(1000, 150,"KEC123",email);
-		inventoryController.addInventory(1000, 150,"KEC124",email);
-		inventoryController.addInventory(1000, 150,"KEC125",email);
-		
-		rackController.addRack(5, (float) 0.5, 1,email);
-		rackController.addRack(10, (float)0.25, 1,email);
-		rackController.addRack(5, (float) 0.5, 2,email);
-		rackController.addRack(10, (float)0.25, 2,email);
-		rackController.addRack(5, (float) 0.5, 3,email);
-		rackController.addRack(10, (float)0.25, 3,email);
-		
-		binController.addBin(1, 500, 22,email);
-		binController.addBin(1, 220, 333,email);
-		binController.addBin(2, 1000, 65,email);
-		binController.addBin(2, 7200, 56,email);
-		binController.addBin(3, 1500, 22,email);
-		binController.addBin(3, 100, 86,email);
-		binController.addBin(4, 600, 100,email);
-		binController.addBin(4, 2000, 56,email);
-		binController.addBin(5, 500, 95,email);
-		binController.addBin(5, 1000, 333,email);
-		binController.addBin(6, 500, 100,email);
-		binController.addBin(6, 7200, 96,email);
 	}
 
 	private int getInteger(HttpServletRequest req, String name) {

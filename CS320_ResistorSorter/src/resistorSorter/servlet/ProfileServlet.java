@@ -8,15 +8,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import resistorSorter.controllers.BinController;
+import resistorSorter.controllers.InventoryController;
 import resistorSorter.controllers.InventoryTransactionController;
 import resistorSorter.controllers.LoginController;
+import resistorSorter.controllers.RackController;
 import resistorSorter.model.InventoryTransaction;
+import resistorSorter.persist.DerbyDatabase;
+
 
 
 public class ProfileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private InventoryTransactionController inventoryTransactionController;
 	private LoginController loginController;
+	private InventoryController inventoryController;
+	private RackController rackController;
+	private BinController binController;
 	String username;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -25,6 +33,10 @@ public class ProfileServlet extends HttpServlet {
 		//initialize controllers
 		inventoryTransactionController = new InventoryTransactionController("inventory");
 		loginController = new LoginController("inventory");
+		inventoryController = new InventoryController("inventory");
+		rackController = new RackController("inventory");
+		binController = new BinController("inventory");
+		
 		
 		//check to see if user is logged in
 		String email = (String) req.getSession().getAttribute("user");
@@ -47,6 +59,9 @@ public class ProfileServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		//initialize error to null
+		String error = null;
+		
 		//initialize controllers
 		inventoryTransactionController = new InventoryTransactionController("inventory");
 		
@@ -54,30 +69,58 @@ public class ProfileServlet extends HttpServlet {
 		String email = (String) req.getSession().getAttribute("user");
 		username = email.substring(0, email.indexOf('@'));
 		
-		if (req.getParameter("logout") != null) {
+		//if reset inventory is pressed
+		if (req.getParameter("resetInventory") != null) {
+			req.getSession().invalidate();
+			DerbyDatabase.deleteDataBase();
+			DerbyDatabase.loadDataBase();
+			loginController.insertNewUser("blinne@ycp.edu");
+			loginController.updateAdminFlag("blinne@ycp.edu", true);
+			resp.sendRedirect(req.getContextPath() + "/Login");
+			return;
+			//old code used if button is displayed to user
+			/*if(!loginController.getAdminFlag(email)){
+				error = "Only admistrators can do that";
+			}
+			else{
+				DerbyDatabase.deleteDataBase();
+				DerbyDatabase.loadDataBase();
+			}*/
+		}
+		//if populate tables is pressed
+		else if(req.getParameter("populateTables") != null){
+			if(!loginController.getAdminFlag(email)){
+				error = "Only admistrators can do that";
+			}
+			else if(inventoryController.getCountOfInventories() > 0){
+				error = "Cannot populate already existing inventory";
+			}
+			else{
+				populateTables((String) req.getSession().getAttribute("user"));
+			}
+		}
+		else if (req.getParameter("logout") != null) {
 			System.out.println("logout");
 			req.getSession().invalidate();
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
 		}
-		
-		if (req.getParameter("requestAdmin") != null && (!loginController.checkRequest(email))) {
+		else if (req.getParameter("requestAdmin") != null && (!loginController.checkRequest(email))) {
 			loginController.userRequestAdmin(email);
 			loginController.updateRequest(email, true);
 		}
-		
 		//Send to transactions
-		if(req.getParameter("viewTransactions") != null){
+		else if(req.getParameter("viewTransactions") != null){
 			resp.sendRedirect(req.getContextPath() + "/AllTransactions");
 			return;
 		}
-		
 		
 		//send info to jsp
 		req.setAttribute("username", username);
 		displayUserTransactions(req);
 		displayUserStatus(req);
 		spamFilter(req);
+		req.setAttribute("errorMessage", error);
 		// Forward to view to render the result HTML document
 		req.getRequestDispatcher("/_view/Profile.jsp").forward(req, resp);
 	}
@@ -112,6 +155,32 @@ public class ProfileServlet extends HttpServlet {
 			//System.out.println("The user has already submitted a request");
 			req.setAttribute("request", false);
 		}
+	}
+	
+	private void populateTables(String email){
+		inventoryController.addInventory(1000, 150,"KEC123",email);
+		inventoryController.addInventory(1000, 150,"KEC124",email);
+		inventoryController.addInventory(1000, 150,"KEC125",email);
+		
+		rackController.addRack(5, (float) 0.5, 1,email);
+		rackController.addRack(10, (float)0.25, 1,email);
+		rackController.addRack(5, (float) 0.5, 2,email);
+		rackController.addRack(10, (float)0.25, 2,email);
+		rackController.addRack(5, (float) 0.5, 3,email);
+		rackController.addRack(10, (float)0.25, 3,email);
+		
+		binController.addBin(1, 500, 500,email);
+		binController.addBin(1, 220, 1000,email);
+		binController.addBin(2, 1000, 65,email);
+		binController.addBin(2, 7200, 56,email);
+		binController.addBin(3, 1500, 22,email);
+		binController.addBin(3, 100, 86,email);
+		binController.addBin(4, 600, 100,email);
+		binController.addBin(4, 2000, 56,email);
+		binController.addBin(5, 500, 95,email);
+		binController.addBin(5, 1000, 333,email);
+		binController.addBin(6, 500, 100,email);
+		binController.addBin(6, 7200, 96,email);
 	}
 	
 }

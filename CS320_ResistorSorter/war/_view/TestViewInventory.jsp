@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-	
+	<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>View Inventory</title>
 		
 		
@@ -303,8 +303,6 @@ function drawResistor(){
 
 </script>
 
-
-
 	</head>
 	<body>
 	<div class="container">
@@ -329,7 +327,12 @@ function drawResistor(){
 			<c:forEach items="${inventories}" var="inventories" varStatus="inventoriesStatus"> 								
 			<div class="columns col">
 			<ul class="price">
-			<li class="header">${inventories.inventoryName}</li>
+			<li class="header">
+				<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+					${inventories.inventoryName}
+					<button class="glyphicon glyphicon-trash" type="submit" name="deleteInventory" value="${inventories.inventory_id}"></button>
+				</form>
+			</li>
 			<li class="grey">
 				Bin Capacity: ${inventories.binCapacity}<br>
 				Remove Limit: ${inventories.userRemoveLimit}
@@ -359,9 +362,13 @@ function drawResistor(){
 										
 								</div>
 									<div class="dropdown-content">
-									<c:forEach items="${bins}" var="bins" varStatus="binsStatus">		
+									<c:forEach items="${bins}" var="bins" varStatus="binsStatus">	
+										<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
 										<c:if test="${bins.rack_id == racks.rack_id}">
 											<div class="popup">
+												
+													<div align="right"><button class="glyphicon glyphicon-trash" type="submit" name="deleteBin" value="${bins.bin_id}"></button></div>
+												
 												${bins.resistance} &#x2126;<br>
 												Count: ${bins.count}<br>
 												<canvas id="resistor${binsStatus.count}" width="200" height="100">
@@ -370,10 +377,6 @@ function drawResistor(){
 												<script type="text/javascript">
 													drawResistor("${bins.colorBands[0]}", "${bins.colorBands[1]}", "${bins.colorBands[2]}", "${bins.colorBands[3]}", "resistor${binsStatus.count}")
 												</script>
-											
-												<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-													<button type="submit" name="deleteBin" value="${bins.bin_id}">Delete</button>
-												</form>
 												<div class="progress">
 													<div class="progress-bar progress-bar-striped active" role="progressbar" style="width:${(bins.count / inventories.binCapacity)*100}%">
 														<b><font color="#111111">
@@ -383,16 +386,20 @@ function drawResistor(){
 															</font></b>
 													</div>
 												</div>
-												
+												<input type= "hidden" name= "bin_id" value= "${bins.bin_id}">
+												<input type="Submit" name="addResistors" value="Add">
+												<input type="number" min="1" max="${max_count}"name="countChange" size="12" value="1" />
+												<input type="Submit" name="removeResistors" value="Remove">
 												
 											</div>
 										</c:if>
+										</form>
 									</c:forEach>
 									</div>
 								</div>
 							</div><span class="rackDesc"><br>Tolerance: ${racks.tolerance}<br>Power Rating: ${racks.wattage}</span>
 							<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-													<button type="submit" name="deleteRack" value="${racks.rack_id}">Delete</button>
+													<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
 												</form>
 						</li>
 					</c:if>
@@ -400,7 +407,6 @@ function drawResistor(){
 				<li class="grey">
 				<!-- need a form for every inventory so that input fields are duplicated -->
 				<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-					<button class="button" type="submit" name="deleteInventory" value="${inventories.inventory_id}">Delete</button>
 					<div class="popup" onclick="toggleRack(${inventoriesStatus.count})"> <div class="button" id= "rackB" >Add Rack</div>
 						<input type= "hidden" name= "popup_id" value= "${inventoriesStatus.count}">
 							<div class="popuptext" id="rackPopup${inventoriesStatus.count}">

@@ -1,4 +1,5 @@
 document.write('\
+		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">\
 		<nav class="navbar navbar-inverse">\
     	<!-- Brand and toggle get grouped for better mobile display -->\
    		<div class="navbar-header">\

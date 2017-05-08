@@ -7,6 +7,7 @@ All work seen in here has been copied, but modified from the Library example -->
 
 <html>
 	<head>
+		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>Login</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="google-signin-client_id" content="486265042204-irblv200fagfgejidat6bdnqivrvonha.apps.googleusercontent.com">
