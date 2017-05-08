@@ -9,7 +9,19 @@ document.write('\
             	<span class="icon-bar"></span>\
             	<span class="icon-bar"></span>\
         	</button>\
-        	<a href="https://github.com/benjinne/VCDD/wiki" target="_blank" class="navbar-brand"><span class="glyphicon glyphicon-globe"></span> VCDD</a>\
+        	<li><button class="navbar-brand" data-toggle="modal" data-target="#myModal"> <span class="glyphicon glyphicon-globe"></span> VCDD</button></li>\
+	      	<div class="modal-content">\
+        		<div class="modal-header">\
+          		<button type="button" class="close" data-dismiss="modal">&times;</button>\
+          		<h4 class="modal-title">Modal Header</h4>\
+			</div>\
+        	<div class="modal-body">\
+          		<p>Some text in the modal.</p>\
+        	</div>\
+        	<div class="modal-footer">\
+          		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+        	</div>\
+			</div>\
     	</div>\
     <!-- Collection of nav links and other content for toggling -->\
 	    <div id="navbarCollapse" class="collapse navbar-collapse">\
