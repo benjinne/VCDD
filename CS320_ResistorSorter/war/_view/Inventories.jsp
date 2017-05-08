@@ -5,6 +5,7 @@
 
 <html>
 	<head>
+		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>Inventories</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">

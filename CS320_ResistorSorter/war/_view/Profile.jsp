@@ -7,6 +7,7 @@ All work seen in here has been copied, but modified from the Library example -->
 
 <html>
 	<head>
+		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>Profile</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -45,9 +46,9 @@ All work seen in here has been copied, but modified from the Library example -->
 	   		</c:if>
 	    </c:if>
 	   	<c:if test="${admin}">
-				<p>View all user activity: <button type="submit" class="btn btn-primary active" name="viewTransactions">
-				All Transactions <span class="glyphicon glyphicon-signal"></span>
-				</button></p>
+				<p>View all user activity: <button type="submit" class="btn btn-primary active" name="viewTransactions">All Transactions <span class="glyphicon glyphicon-signal"></span></button></p>
+				<button type="submit" class="btn btn-primary active" name="resetInventory">Reset Inventory</button>
+				<button type="submit" class="btn btn-primary active" name="populateTables">Populate Tables</button>
 		</c:if>
 	  </div>
 			<div>

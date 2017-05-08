@@ -5,7 +5,7 @@
 
 <html>
 	<head>
-	
+	<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>View Inventory</title>
 		
 		
@@ -127,7 +127,7 @@
 	.dropdown-content {
 	    display: none;
 	    position: absolute;
-	    background-color: #f9f9f9;
+	    background-color: #C7C7C7;
 	    min-width: 160px;
 	    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	    z-index: 1;
@@ -197,9 +197,6 @@
     border-color: #555 transparent transparent transparent;
 }
 
-.navbar-btn{
-	margin-right: 20px;
-}
 
 /* Toggle this class - hide and show the popup */
 .popup .show {
@@ -208,7 +205,7 @@
     animation: fadeIn .5s;
 }
 .popup:hover{
-	background-color: #CFCFCF;
+	background-color: #ddd;
 }
 
 /* Add animation (fade in the popup) */
@@ -222,6 +219,9 @@
     to {opacity:1 ;}
 }
 
+#rackB{
+	margin: 10px;
+}
 
 </style> 
 
@@ -237,40 +237,102 @@ $(function(){
 	});
 });
 
-function myFunction() {
+function toggleBin() {
 	var id = String(arguments[0]);
-    var popup = document.getElementById("myPopup"+id);
+    var popup = document.getElementById("binPopup"+id);
     popup.classList.toggle("show");
 }
 
+function toggleRack() {
+	var id = String(arguments[0]);
+    var popup = document.getElementById("rackPopup"+id);
+    popup.classList.toggle("show");
+
+}
+
+function drawResistor(){
+	var resistorImg = new Image();
+    resistorImg.src = "_view/images/resistor.png";
+	
+	var color1 = String(arguments[0]);
+	var color2 = String(arguments[1]);
+	var color3 = String(arguments[2]);
+	var color4 = String(arguments[3]);
+	var elementID = String(arguments[4]);
+	var canvas = document.getElementById(elementID);
+    var ctx = canvas.getContext("2d");
+	
+	ctx.drawImage(resistorImg, 0, 0, 200, 60);
+    
+    ctx.fillStyle = color1;
+    ctx.beginPath();
+    ctx.fillRect(60, 5, 12, 50);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.fillStyle = color2;
+    ctx.beginPath();
+    ctx.fillRect(83, 5, 12, 50);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.fillStyle = color3;
+    ctx.beginPath();
+    ctx.fillRect(106, 5, 12, 50);
+    ctx.closePath();
+    ctx.fill();
+    
+    if(color4.localeCompare("none")){
+    	ctx.fillStyle = color4;
+    	ctx.beginPath();
+        ctx.fillRect(129, 5, 12, 50);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    ctx.fillStyle = "black";
+    ctx.font = "15px Garamond";
+    ctx.fillText(color1 + " " + color2 + " " + color3 + " " + color4,40,85);
+	
+	//delete canvas;
+	//delete ctx;
+}
+
+
+
+
 </script>
-
-
 
 	</head>
 	<body>
 	<div class="container">
-	<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-		<script src="_view/javaScript/navbar.js"></script>
-    	<c:if test="${! empty errorMessage}">
-			<div class="alert alert-danger alert-dismissable fade in">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Error: </strong>${errorMessage}
+		<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+			<script src="_view/javaScript/navbar.js"></script>
+			<script type="text/javascript" src="_view/javaScript/resistor.js"></script>
+		
+	    	<c:if test="${! empty errorMessage}">
+				<div class="alert alert-danger alert-dismissable fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Error: </strong>${errorMessage}
+				</div>
+			</c:if>
+			<div> 
+				InventoryName: <input type="text" name ="inventoryName" size="12">
+				Bin Capacity: <input type="text" name ="binCapacity" size="12">
+				Remove Limit: <input type="text" name ="userRemoveLimit" size="12">
+				<input class="btn btn-primary" type="Submit" name="addInventory" value="Add Inventory">
 			</div>
-		</c:if>
-		<div> 
-			<input type="Submit" name="resetInventory" value="Reset Inventory">
-			<input type="Submit" name="populateTables" value="Populate Tables">
-			InventoryName: <input type="text" name ="inventoryName" size="12">
-			Bin Capacity: <input type="text" name ="binCapacity" size="12">
-			Remove Limit: <input type="text" name ="userRemoveLimit" size="12">
-			<input class="btn btn-primary" type="Submit" name="addInventory" value="Add Inventory">
-		</div>	
+		</form>
 		<div class= "row" id= "myContainer">
 			<c:forEach items="${inventories}" var="inventories" varStatus="inventoriesStatus"> 								
 			<div class="columns col">
 			<ul class="price">
-			<li class="header">${inventories.inventoryName}</li>
+			<li class="header">
+				<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+					${inventories.inventoryName}
+					<button class="glyphicon glyphicon-trash" type="submit" name="deleteInventory" value="${inventories.inventory_id}"></button>
+				</form>
+			</li>
 			<li class="grey">
 				Bin Capacity: ${inventories.binCapacity}<br>
 				Remove Limit: ${inventories.userRemoveLimit}
@@ -280,55 +342,95 @@ function myFunction() {
 						<li>
 							<div class= "priceHead dropdown">
 								<div class="dropdown">
-									<button class="dropbtn">Rack: ${racks.rack_id}</button>
+								<div class="popup" onclick="toggleBin(${racksStatus.count})">
+									<div class="dropbtn">Rack</div>
+									<input type= "hidden" name= "popup_id" value="${binsStatus.count}">
+									
+										<div class="popuptext" id="binPopup${racksStatus.count}">
+											<div>
+											<!-- need a form for every rack so that input fields are duplicated -->
+												<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+													<input type= "hidden" name= "rack_id" value= "${racks.rack_id}">
+													<span>Resistance: </span>
+													<input type="number" min="1" name="resistance" size="12" value="1"/>
+													<span>Count: </span>
+													<input type="number" min="1" max="${binCap}"name="count" size="12" value="1"/>
+													<input type="Submit" name="addBin" value="Add Bin!">
+												</form>
+											</div>
+										</div>
+										
+								</div>
 									<div class="dropdown-content">
-									<c:forEach items="${bins}" var="bins" varStatus="binsStatus">		
+									<c:forEach items="${bins}" var="bins" varStatus="binsStatus">	
+										<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
 										<c:if test="${bins.rack_id == racks.rack_id}">
-											<div class="popup" onclick="myFunction(${binsStatus.count})">${bins.resistance} &#x2126;<br> Count: ${bins.count}<br>
+											<div class="popup">
+												
+													<div align="right"><button class="glyphicon glyphicon-trash" type="submit" name="deleteBin" value="${bins.bin_id}"></button></div>
+												
+												${bins.resistance} &#x2126;<br>
+												Count: ${bins.count}<br>
+												<canvas id="resistor${binsStatus.count}" width="200" height="100">
+												This text is displayed if your browser does not support HTML5 Canvas.
+												</canvas>
+												<script type="text/javascript">
+													drawResistor("${bins.colorBands[0]}", "${bins.colorBands[1]}", "${bins.colorBands[2]}", "${bins.colorBands[3]}", "resistor${binsStatus.count}")
+												</script>
 												<div class="progress">
 													<div class="progress-bar progress-bar-striped active" role="progressbar" style="width:${(bins.count / inventories.binCapacity)*100}%">
-														<b><font color="red">${(bins.count / inventories.binCapacity)*100}%</font></b>
+														<b><font color="#111111">
+															<script>
+																document.write((${(bins.count / inventories.binCapacity)*100}.toFixed(2)));
+															</script>%
+															</font></b>
 													</div>
 												</div>
-												<input type= "hidden" name= "popup_id" value= "${binsStatus.count}">
-												<div class="popuptext" id="myPopup${binsStatus.count}">
-													<div>
-														<input type= "hidden" name= "rack_id" value= "${bins.rack_id}">
-														<span>Resistance: </span>
-														<input type="number" min="1" name="resistance" size="12" value="1"/>
-														<span>Count: </span>
-														<input type="number" min="1" max="${binCap}"name="count" size="12" value="1"/>
-														<input type="Submit" name="addBin" value="Add Bin!">
-													</div>
-												</div>
+												<input type= "hidden" name= "bin_id" value= "${bins.bin_id}">
+												<input type="Submit" name="addResistors" value="Add">
+												<input type="number" min="1" max="${max_count}"name="countChange" size="12" value="1" />
+												<input type="Submit" name="removeResistors" value="Remove">
+												
 											</div>
 										</c:if>
+										</form>
 									</c:forEach>
 									</div>
 								</div>
 							</div><span class="rackDesc"><br>Tolerance: ${racks.tolerance}<br>Power Rating: ${racks.wattage}</span>
+							<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+													<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
+												</form>
 						</li>
 					</c:if>
 				</c:forEach>
 				<li class="grey">
-				<button class="button" type="submit" name="deleteInventory" value="${inventories.inventory_id}">Delete</button>
-				
-				<div class="popup" onclick="myFunction(${inventoriesStatus.count})">Add Rack
-					<input type= "hidden" name= "popup_id" value= "${inventoriesStatus.count}">
-						<div class="popuptext" id="myPopup${inventoriesStatus.count}">
-						<div>
-								<span>Resistance: </span>
-								<span>Count: </span>
+				<!-- need a form for every inventory so that input fields are duplicated -->
+				<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+					<div class="popup" onclick="toggleRack(${inventoriesStatus.count})"> <div class="button" id= "rackB" >Add Rack</div>
+						<input type= "hidden" name= "popup_id" value= "${inventoriesStatus.count}">
+							<div class="popuptext" id="rackPopup${inventoriesStatus.count}">
+							<div>
+										<input type= "hidden" name= "inventory_id" value= "${inventories.inventory_id}">
+										<span>Tolerance: </span><br>
+										<input type="number" min="1" max="25" name="tolerance" size="12"/><br>
+										<span>Power: </span>
+										<input type="number" min="0.05" step="0.01" name="power" size="12"/>
+										<input type="Submit" name="addRack" value="Add Rack!">
+								
+									
+							</div>
 						</div>
 					</div>
-				</div>
+					</form>
 				</li>
-		</ul>
+			</ul>
 		</div>								
 		</c:forEach>
 		</div>
-	</form>
+	
 	</div>
 	</body>
+
 </html>
 
