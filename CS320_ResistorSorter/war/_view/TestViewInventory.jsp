@@ -4,14 +4,13 @@
 
 
 <html>
-	<head>	
+	<head>
 	<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>View Inventory</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<link href= "_view/css/styles.css" rel= "stylesheet" type= "text/css">
-		<link rel="stylesheet" type="text/css" href="/css/result-light.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -24,10 +23,6 @@
 	    box-sizing: border-box;
 	}
 	
-	html{
-		overflow: -moz-scrollbars-vertical; 
-    	overflow-y: scroll;
-	}
 	.columns {
 		
 	    float: left;
@@ -54,6 +49,7 @@
 	    background-color: #01C91B;
 	}
 	.price .header {
+		display: list-item;
 	    background-color: #111;
 	    color: white;
 	    font-size: 25px;
@@ -61,11 +57,21 @@
 	
 	
 	.price li {
+		display: none;
 	    border-bottom: 1px solid #eee;
 	    padding: 20px;
 	    text-align: center;
 	    
 	}
+	
+	.price li {
+	
+	    border-bottom: 1px solid #eee;
+	    padding: 20px;
+	    text-align: center;
+	    
+	}
+	
 	
 	.price .grey {
 	    background-color: #eee;
