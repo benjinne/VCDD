@@ -43,12 +43,13 @@ All work seen in here has been copied, but modified from the Library example -->
 						<tr>
 							<th>Transaction Time (mm/dd/yyyy hh:mm)</th>
 							<th>Username</th>
+							<th>Inventory Name</th>
 							<th>Resistance</th>
 							<th>Wattage</th>
 							<th>Tolerance</th>
 							<th>Quantity</th>
-							<th>transactionType</th>
-							<th>remaining</th>
+							<th>Transaction Type</th>
+							<th>Amount Remaining</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -56,6 +57,7 @@ All work seen in here has been copied, but modified from the Library example -->
 	 						<tr> 
 	 							<td>${item.transactionTime}</td>
 	 							<td>${item.username}</td>
+	 							<td>${item.inventoryName}</td>
 	 						 	<td>${item.resistance}</td>
 	 						 	<td>${item.wattage}</td>
 	 						 	<td>${item.tolerance}</td>

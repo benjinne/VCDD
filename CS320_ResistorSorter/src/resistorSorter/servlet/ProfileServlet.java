@@ -75,7 +75,9 @@ public class ProfileServlet extends HttpServlet {
 			DerbyDatabase.deleteDataBase();
 			DerbyDatabase.loadDataBase();
 			loginController.insertNewUser("blinne@ycp.edu");
+			loginController.insertNewUser("dwebb4@ycp.edu");
 			loginController.updateAdminFlag("blinne@ycp.edu", true);
+			loginController.updateAdminFlag("dwebb4@ycp.edu", true);
 			resp.sendRedirect(req.getContextPath() + "/Login");
 			return;
 			//old code used if button is displayed to user

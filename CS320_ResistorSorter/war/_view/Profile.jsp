@@ -47,8 +47,8 @@ All work seen in here has been copied, but modified from the Library example -->
 	    </c:if>
 	   	<c:if test="${admin}">
 				<p>View all user activity: <button type="submit" class="btn btn-primary active" name="viewTransactions">All Transactions <span class="glyphicon glyphicon-signal"></span></button></p>
-				<button type="submit" class="btn btn-primary active" name="resetInventory">Reset Inventory</button>
-				<button type="submit" class="btn btn-primary active" name="populateTables">Populate Tables</button>
+				<button type="submit" class="btn btn-primary active" name="resetInventory">Reset Inventory <span class="glyphicon glyphicon-refresh"></span></button>
+				<button type="submit" class="btn btn-primary active" name="populateTables">Populate Tables <span class="glyphicon glyphicon-plus-sign"></span></button>
 		</c:if>
 	  </div>
 			<div>
@@ -57,18 +57,20 @@ All work seen in here has been copied, but modified from the Library example -->
 					<thead>
 						<tr>
 							<th>Transaction Time (mm/dd/yyyy hh:mm)</th>
+							<th>Inventory Name</th>
 							<th>Resistance</th>
 							<th>Wattage</th>
 							<th>Tolerance</th>
 							<th>Quantity</th>
-							<th>transactionType</th>
-							<th>remaining</th>
+							<th>Transaction Type</th>
+							<th>Amount Remaining</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${transactions}" var="item" varStatus="status">
 	 						<tr> 
 	 							<td>${item.transactionTime}</td>
+	 							<td>${item.inventoryName}</td>
 	 						 	<td>${item.resistance}</td>
 	 						 	<td>${item.wattage}</td>
 	 						 	<td>${item.tolerance}</td>

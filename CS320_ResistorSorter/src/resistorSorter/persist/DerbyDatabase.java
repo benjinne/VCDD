@@ -139,6 +139,7 @@ public class DerbyDatabase implements IDatabase {
 							+ " generated always as identity (start with 1, increment by 1),"
 							+ " transactionTime timestamp,"
 							+ " email varchar(20),"
+							+ " inventoryName varchar(20),"
 							+ " resistance integer,"
 							+ " wattage float,"
 							+ " tolerance float,"
@@ -756,17 +757,18 @@ public class DerbyDatabase implements IDatabase {
 						int transaction_id = resultSet.getInt(1);
 						Timestamp transactionTime = resultSet.getTimestamp(2);
 						//String username = resultSet.getString(3); NOT NEEDED SINCE USERNAME COMES FROM METHOD
-						int resistance = resultSet.getInt(4);
-						float wattage = resultSet.getFloat(5);
-						float tolerance = resultSet.getFloat(6);
-						int quantity = resultSet.getInt(7);
-						boolean transactionType = resultSet.getBoolean(8);
-						int remaining = resultSet.getInt(9);
-
+						String inventoryName = resultSet.getString(4);
+						int resistance = resultSet.getInt(5);
+						float wattage = resultSet.getFloat(6);
+						float tolerance = resultSet.getFloat(7);
+						int quantity = resultSet.getInt(8);
+						boolean transactionType = resultSet.getBoolean(9);
+						int remaining = resultSet.getInt(10);
+						//System.out.println(inventoryName);
 						
 						
 						
-						InventoryTransaction inventoryTransaction= new InventoryTransaction(transaction_id, transactionTime, email, resistance, wattage, tolerance, quantity, transactionType, remaining);
+						InventoryTransaction inventoryTransaction= new InventoryTransaction(transaction_id, transactionTime, email, inventoryName, resistance, wattage, tolerance, quantity, transactionType, remaining);
 						
 						result.add(inventoryTransaction);
 					}
@@ -796,11 +798,13 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;
 				ResultSet resultSet1 = null;
 				ResultSet resultSet2 = null;
 				ResultSet resultSet3 = null;
 				ResultSet resultSet4 = null;
-
+				ResultSet resultSet5 = null;
+				
 				try {
 					
 					stmt1 = conn.prepareStatement(
@@ -842,20 +846,35 @@ public class DerbyDatabase implements IDatabase {
 					resultSet4.next();
 					int remaining = resultSet4.getInt(1);
 					
+					//Getting inventory name from bin_id
 					stmt5 = conn.prepareStatement(
-							"insert into transactions "
-							+ "(transactionTime, email, resistance, wattage, tolerance, quantity, transactionType, remaining)"
-							+ " values (?, ?, ?, ?, ?, ?, ?, ?)");
+							"select inventories.inventoryName from bins, racks, inventories"
+							+ " where bins.bin_id = ? "
+							+ " and bins.rack_id = racks.rack_id"
+							+ " and racks.inventory_id = inventories.inventory_id"
+					);
+					stmt5.setInt(1, bin_id);
+					resultSet5 = stmt5.executeQuery();
+					resultSet5.next();
+					String inventoryName = resultSet5.getString(1);
 					
-					stmt5.setTimestamp(1, transactionTime);
-					stmt5.setString(2, email);
-					stmt5.setInt(3, resistance);
-					stmt5.setFloat(4, wattage);
-					stmt5.setFloat(5, tolerance);
-					stmt5.setInt(6, quantity);
-					stmt5.setBoolean(7, transactionType);
-					stmt5.setInt(8, remaining);
-					stmt5.executeUpdate();
+					stmt6 = conn.prepareStatement(
+							"insert into transactions "
+							+ "(transactionTime, email, inventoryName, resistance, wattage, tolerance, quantity, transactionType, remaining)"
+							+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					
+					stmt6.setTimestamp(1, transactionTime);
+					stmt6.setString(2, email);
+					stmt6.setString(3, inventoryName);
+					stmt6.setInt(4, resistance);
+					stmt6.setFloat(5, wattage);
+					stmt6.setFloat(6, tolerance);
+					stmt6.setInt(7, quantity);
+					stmt6.setBoolean(8, transactionType);
+					stmt6.setInt(9, remaining);
+					
+					
+					stmt6.executeUpdate();
 					
 					
 					
@@ -864,11 +883,14 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(resultSet1);
 					DBUtil.closeQuietly(resultSet2);
 					DBUtil.closeQuietly(resultSet3);
+					DBUtil.closeQuietly(resultSet4);
+					DBUtil.closeQuietly(resultSet5);
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
 				}
 			}
 		});
@@ -1033,15 +1055,16 @@ public class DerbyDatabase implements IDatabase {
 						int transaction_id = resultSet.getInt(1);
 						Timestamp transactionTime = resultSet.getTimestamp(2);
 						String email = resultSet.getString(3);
-						int resistance = resultSet.getInt(4);
-						float wattage = resultSet.getFloat(5);
-						float tolerance = resultSet.getFloat(6);
-						int quantity = resultSet.getInt(7);
-						boolean transactionType = resultSet.getBoolean(8);
-						int remaining = resultSet.getInt(9);
+						String inventoryName = resultSet.getString(4);
+						int resistance = resultSet.getInt(5);
+						float wattage = resultSet.getFloat(6);
+						float tolerance = resultSet.getFloat(7);
+						int quantity = resultSet.getInt(8);
+						boolean transactionType = resultSet.getBoolean(9);
+						int remaining = resultSet.getInt(10);
 						
 						
-						InventoryTransaction inventoryTransaction= new InventoryTransaction(transaction_id, transactionTime, email, resistance, wattage, tolerance, quantity, transactionType, remaining);
+						InventoryTransaction inventoryTransaction= new InventoryTransaction(transaction_id, transactionTime, email, inventoryName, resistance, wattage, tolerance, quantity, transactionType, remaining);
 						
 						result.add(inventoryTransaction);
 					}

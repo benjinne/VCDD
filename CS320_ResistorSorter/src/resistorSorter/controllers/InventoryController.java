@@ -52,6 +52,9 @@ public class InventoryController {
 			else if(db.checkInventoryName(inventoryName)){
 				return "Can not have more than one inventory per room";
 			}
+			else if(inventoryName.length() > 20){
+				return "Can not have a large inventory name (20 characters or less)";
+			}
 			db.insertInventory(binCapacity, userRemoveLimit, inventoryName);
 			return null;
 		}

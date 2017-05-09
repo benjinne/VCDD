@@ -12,12 +12,12 @@ public class InventoryTransaction{
 	private float tolerance;
 	private int quantity;
 	//TRUE = ADD, FALSE = REMOVE
-	private char transactionType;
+	private String transactionType;
 	private int remaining;
-	
+	private String inventoryName;
 	
 	//Constructor//
-	public InventoryTransaction(int transaction_id, Timestamp transactionTime, String email, int resistance, float wattage, float tolerance, int quantity, boolean transactionType, int remaining){
+	public InventoryTransaction(int transaction_id, Timestamp transactionTime, String email, String inventoryName, int resistance, float wattage, float tolerance, int quantity, boolean transactionType, int remaining){
 		this.transaction_id = transaction_id;
 		//parsing the timeStamp
 		String temptt = transactionTime.toString();
@@ -40,11 +40,12 @@ public class InventoryTransaction{
 		this.wattage = wattage;
 		this.tolerance = tolerance;
 		this.quantity = quantity;
+		this.inventoryName = inventoryName;
 		//parsing the transactionType
 		if(transactionType == true){
-			this.transactionType = '+';
+			this.transactionType = "Add";
 		}else{
-			this.transactionType = '-';
+			this.transactionType = "Remove";
 		}
 		this.remaining = remaining;
 		
@@ -59,6 +60,9 @@ public class InventoryTransaction{
 	public String getUsername(){
 		return username;
 	}
+	public String getInventoryName(){
+		return inventoryName;
+	}
 	public int getResistance(){
 		return resistance;
 	}
@@ -71,7 +75,7 @@ public class InventoryTransaction{
 	public int getQuantity(){
 		return quantity;
 	}
-	public char getTransactionType(){
+	public String getTransactionType(){
 		return transactionType;
 	}
 	public int getRemaining(){
