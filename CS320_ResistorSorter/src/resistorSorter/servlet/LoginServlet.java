@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 			req.getSession().setAttribute("user", email);
 
 			// redirect to /index page
-			resp.sendRedirect(req.getContextPath() + "/Inventories");
+			resp.sendRedirect(req.getContextPath() + "/TestViewInventory");
 			return;
 		}
 		else{
@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 				req.getSession().setAttribute("user", email);
 
 				// redirect to /index page
-				resp.sendRedirect(req.getContextPath() + "/Inventories");
+				resp.sendRedirect(req.getContextPath() + "/TestViewInventory");
 				return;
 			}
 			else{
