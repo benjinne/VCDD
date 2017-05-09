@@ -22,7 +22,10 @@
 	* {
 	    box-sizing: border-box;
 	}
-	
+	html{
+ 		overflow: -moz-scrollbars-vertical; 
+    	overflow-y: scroll;
+ 	}
 	.columns {
 		
 	    float: left;
