@@ -40,12 +40,12 @@ All work seen in here has been copied, but modified from the Library example -->
 					
 	<form action="${pageContext.servletContext.contextPath}/Profile" method="post">
 		<script src="_view/javaScript/navbar.js"></script>
-    	<c:if test="${! empty errorMessage}">
-			<div class="alert alert-danger alert-dismissable fade in">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Error: </strong>${errorMessage}
-			</div>
-		</c:if>
+	    	<c:if test="${! empty errorMessage}">
+				<div class="alert alert-danger alert-dismissable fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>Error: </strong>${errorMessage}
+				</div>
+			</c:if>
 	  <div class="jumbotron">
 	    <h1>Welcome, ${username}</h1> 
 	    <p>From here, you can view your activity</p> 
