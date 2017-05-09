@@ -223,6 +223,17 @@
 	margin: 10px;
 }
 
+.progress {
+    position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: black;
+ }
+ 
 </style> 
 
 
@@ -379,11 +390,11 @@ function drawResistor(){
 												</script>
 												<div class="progress">
 													<div class="progress-bar progress-bar-striped active" role="progressbar" style="width:${(bins.count / inventories.binCapacity)*100}%">
-														<b><font color="#111111">
-															<script>
-																document.write((${(bins.count / inventories.binCapacity)*100}.toFixed(2)));
-															</script>%
-															</font></b>
+														<b>
+															<font color="#111111">
+																	<span><script>document.write(${(bins.count / inventories.binCapacity)*100}.toFixed(2));</script>% Full</span>
+															</font>
+														</b>
 													</div>
 												</div>
 												<input type= "hidden" name= "bin_id" value= "${bins.bin_id}">
