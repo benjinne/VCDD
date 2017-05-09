@@ -22,22 +22,57 @@ All work seen in here has been copied, but modified from the Library example -->
 		<div class="container">
 		<div class="row">
 	
-		  <div class="jumbotron">
-		    <h1>Login</h1> 
-		    <p>Welcome to The Voltage Current Divider Divider</p>
-		    <p>Now introducing... Sign in, with your Google account: </p><div class="g-signin2" data-onsuccess="onSignIn"></div> 
-		    <form id="loginForm" action="${pageContext.servletContext.contextPath}/Login" method="post">
-		    <input class="btn btn-primary" type="Submit" name="login" value="Login">
-		    <input type="hidden" name="email" id="sendId"/>
-		    </form>
-		  </div>
-	    	<c:if test="${! empty errorMessage}">
-				<div class="alert alert-danger alert-dismissable fade in">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<strong>Error: </strong>${errorMessage}
-				</div>
-			</c:if>
+	  <div class="jumbotron">
+	    <h1>Login</h1> 
+	    <p>Welcome to The Voltage Current Divider Divider</p>
+	    <p>Now introducing... Sign in, with your Google account: <div class="g-signin2" data-onsuccess="onSignIn"></div></p>    
+	    <form id="loginForm" action="${pageContext.servletContext.contextPath}/Login" method="post">
+	    <input class="btn btn-primary" type="Submit" name="login" value="Login">
+	    <input type="hidden" name="email" id="sendId"/>
+	    </form>
+	  </div>
+    	<c:if test="${! empty errorMessage}">
+			<div class="alert alert-danger alert-dismissable fade in">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Error: </strong>${errorMessage}
 			</div>
+		</c:if>
+	  
+	  <!-- 
+	  <a href="#" onclick="signOut();">Sign out</a>
+	  
+	  
+		<form id="loginForm" action="${pageContext.servletContext.contextPath}/Login" method="post">
+			<div class="form-group">
+				<label for="user">User Name:</label>
+  				<input type="text" class="form-control" name="username" size="12" id="user" value="${username}" style="width: 200px;">
+			</div>
+			<div class="form-group">	
+				<label for="pass">Password:</label>
+  				<input type="password" class="form-control" name="password" size="12" id="pass" value="${password}" style="width: 200px;">
+  			</div>
+			<div>
+				<input class="btn btn-primary" type="Submit" name="login" value="Login">
+			</div>
+			
+			<input type="hidden" name="email" id="sendId"/>
+				
+		</form>
+		 -->
+		 
+		 
+		<!--  
+		<form action="${pageContext.servletContext.contextPath}/CreateAccount" method="get">
+			<div class="form-group" align="right">
+				<label for="create">Don't have an account? Click here to get started!</label>
+				<div>
+					<input class="btn btn-primary" type="Submit" id="create" name="createAccount" value="Create Account">
+				</div>
+			</div>
+		</form>
+		-->
+		
+		</div>
 		</div>
 		
 	</body>

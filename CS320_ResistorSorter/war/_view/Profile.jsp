@@ -20,13 +20,6 @@ All work seen in here has been copied, but modified from the Library example -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
 		
-		
-		
-		
-		
-		
-		
-		
 		<script type="text/javascript" src="_view/javaScript/jquery-latest.js"></script> 
  		<script type="text/javascript" src="_view/javaScript/jquery.tablesorter.min.js"></script>
   		<link rel="stylesheet" href="_view/css/tableThemes/blue/style.css" type="text/css" media="print, projection, screen" />
