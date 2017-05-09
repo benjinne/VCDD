@@ -29,7 +29,7 @@ public class ProfileServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		String error = null;
 		//initialize controllers
 		inventoryTransactionController = new InventoryTransactionController("inventory");
 		loginController = new LoginController("inventory");
@@ -49,6 +49,7 @@ public class ProfileServlet extends HttpServlet {
 		
 		//send info to jsp
 		req.setAttribute("username", username);
+		req.setAttribute("errorMessage", error);
 		displayUserTransactions(req);
 		displayUserStatus(req);
 		spamFilter(req);
@@ -163,6 +164,8 @@ public class ProfileServlet extends HttpServlet {
 		inventoryController.addInventory(1000, 150,"KEC123",email);
 		inventoryController.addInventory(1000, 150,"KEC124",email);
 		inventoryController.addInventory(1000, 150,"KEC125",email);
+		inventoryController.addInventory(500, 100,"KEC130",email);
+		inventoryController.addInventory(10000, 1000,"STOCK",email);
 		
 		rackController.addRack(5, (float) 0.5, 1,email);
 		rackController.addRack(10, (float)0.25, 1,email);
@@ -170,6 +173,10 @@ public class ProfileServlet extends HttpServlet {
 		rackController.addRack(10, (float)0.25, 2,email);
 		rackController.addRack(5, (float) 0.5, 3,email);
 		rackController.addRack(10, (float)0.25, 3,email);
+		rackController.addRack(5, (float) 0.5, 4,email);
+		rackController.addRack(10, (float)0.25, 5,email);
+		rackController.addRack(20, (float) 0.3, 4,email);
+		rackController.addRack(1, (float)0.25, 5,email);
 		
 		binController.addBin(1, 500, 500,email);
 		binController.addBin(1, 220, 1000,email);
@@ -183,6 +190,21 @@ public class ProfileServlet extends HttpServlet {
 		binController.addBin(5, 1000, 333,email);
 		binController.addBin(6, 500, 100,email);
 		binController.addBin(6, 7200, 96,email);
+		binController.addBin(7, 150, 95,email);
+		binController.addBin(7, 60, 333,email);
+		binController.addBin(8, 78, 100,email);
+		binController.addBin(8, 650, 96,email);
+		binController.addBin(7, 720, 95,email);
+		binController.addBin(7, 630, 333,email);
+		binController.addBin(8, 50000, 65,email);
+		binController.addBin(7, 7200, 96,email);
+		binController.addBin(8, 25000, 1500,email);
+		binController.addBin(8, 80, 6000,email);
+		binController.addBin(8, 70, 5000,email);
+		binController.addBin(8, 32, 1000,email);
+		binController.addBin(8, 56, 9800,email);
+		binController.addBin(8, 1600, 8000,email);
+		binController.addBin(8, 5400, 7500,email);
 	}
 	
 }
