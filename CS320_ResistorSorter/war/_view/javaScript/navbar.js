@@ -1,5 +1,4 @@
 document.write('\
-		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">\
 		\
 		<nav class="navbar navbar-inverse">\
     	<!-- Brand and toggle get grouped for better mobile display -->\
@@ -20,7 +19,7 @@ document.write('\
 	        </ul>\
 	        <ul class="nav navbar-nav navbar-right">\
 	        	<li><a href="/resistorSorter/Profile"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>\
-	        	<li><button class="btn btn-danger navbar-btn" type="submit" name="logout">Logout</button></li>\
+	        	<li><button class="btn btn-danger navbar-btn" type="submit" name="logout" onclick="window.open(\'https://accounts.google.com/logout\', \'_blank\')">Logout</button></li>\
 	        </ul>\
 	    </div>\
 	</nav>\
