@@ -27,9 +27,8 @@
     	overflow-y: scroll;
  	}
 	.columns {
-		
 	    float: left;
-	    width: 33.3%;
+	    width: 25%;
 	    padding: 8px;
 	    
 	}
@@ -137,7 +136,7 @@
 	    min-width: 160px;
 	    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 	    z-index: 1;
-	    
+	    margin-left: -78px;
 	}
 	
 	.dropdown-content a {
@@ -187,7 +186,7 @@
     z-index: 1;
     bottom: 125%;
     left: 50%;
-    margin-left: -80px;
+    margin-left: -140px;
     
 }
 
@@ -240,6 +239,11 @@
     color: black;
  }
  
+ .glyphicon-trash{
+ 	color: red;
+ 	background-color:transparent;
+ 	border-color:transparent;
+ }
 </style> 
 
 
@@ -254,23 +258,21 @@ $(function(){
 	});
 });
 
-function toggleBin() {
-	var id = String(arguments[0]);
-    var popup = document.getElementById("binPopup"+id);
-    popup.classList.toggle("show");
-}
-
 function toggleRack() {
 	var id = String(arguments[0]);
     var popup = document.getElementById("rackPopup"+id);
     popup.classList.toggle("show");
+}
 
+function toggleInventory() {
+	var id = String(arguments[0]);
+    var popup = document.getElementById("inventoryPopup"+id);
+    popup.classList.toggle("show");
 }
 
 function drawResistor(){
 	var resistorImg = new Image();
     resistorImg.src = "_view/images/resistor.png";
-	
 	var color1 = String(arguments[0]);
 	var color2 = String(arguments[1]);
 	var color3 = String(arguments[2]);
@@ -278,7 +280,8 @@ function drawResistor(){
 	var elementID = String(arguments[4]);
 	var canvas = document.getElementById(elementID);
     var ctx = canvas.getContext("2d");
-	
+	//onload used to prevent canvas from drawing before the image is loaded
+    resistorImg.onload = function() {
 	ctx.drawImage(resistorImg, 0, 0, 200, 60);
     
     ctx.fillStyle = color1;
@@ -313,10 +316,8 @@ function drawResistor(){
 	
 	//delete canvas;
 	//delete ctx;
+    }
 }
-
-
-
 
 </script>
 
@@ -357,13 +358,13 @@ function drawResistor(){
 				<c:forEach items="${racks}" var="racks" varStatus="racksStatus">
 					<c:if test="${inventories.inventory_id == racks.inventory_id}">
 						<li>
+							<span class="rackDesc"><br>Tolerance: ${racks.tolerance}%<br>Power Rating: ${racks.wattage}W</span>
 							<div class= "priceHead dropdown">
 								<div class="dropdown">
-								<div class="popup" onclick="toggleBin(${racksStatus.count})">
-									<div class="dropbtn">Rack</div>
+								<div class="popup">
+									<div class="dropbtn" onclick="toggleRack(${racksStatus.count})">View Bins</div>
 									<input type= "hidden" name= "popup_id" value="${binsStatus.count}">
-									
-										<div class="popuptext" id="binPopup${racksStatus.count}">
+										<div class="popuptext" id="rackPopup${racksStatus.count}">
 											<div>
 											<!-- need a form for every rack so that input fields are duplicated -->
 												<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
@@ -376,66 +377,63 @@ function drawResistor(){
 												</form>
 											</div>
 										</div>
-										
 								</div>
 									<div class="dropdown-content">
-									<c:forEach items="${bins}" var="bins" varStatus="binsStatus">	
-										<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-										<c:if test="${bins.rack_id == racks.rack_id}">
-											<div class="popup">
-												
-													<div align="right"><button class="glyphicon glyphicon-trash" type="submit" name="deleteBin" value="${bins.bin_id}"></button></div>
-												
-												${bins.resistance} &#x2126;<br>
-												Count: ${bins.count}<br>
-												<canvas id="resistor${binsStatus.count}" width="200" height="100">
-												This text is displayed if your browser does not support HTML5 Canvas.
-												</canvas>
-												<script type="text/javascript">
-													drawResistor("${bins.colorBands[0]}", "${bins.colorBands[1]}", "${bins.colorBands[2]}", "${bins.colorBands[3]}", "resistor${binsStatus.count}")
-												</script>
-												<div class="progress">
-													<div class="progress-bar progress-bar-striped active" role="progressbar" style="width:${(bins.count / inventories.binCapacity)*100}%">
-														<b>
-															<font color="#111111">
-																	<span><script>document.write(${(bins.count / inventories.binCapacity)*100}.toFixed(2));</script>% Full</span>
-															</font>
-														</b>
+										<c:forEach items="${bins}" var="bins" varStatus="binsStatus">	
+											<c:if test="${bins.rack_id == racks.rack_id}">
+												<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+													<div class="popup">
+														<div align="right">
+															<button class="glyphicon glyphicon-trash" type="submit" name="deleteBin" value="${bins.bin_id}"></button>
+														</div>
+														${bins.resistance} &#x2126;<br>
+														Count: ${bins.count}<br>
+														<canvas id="resistor${binsStatus.count}" width="200" height="100">
+															This text is displayed if your browser does not support HTML5 Canvas.
+														</canvas>
+														<script type="text/javascript">
+															drawResistor("${bins.colorBands[0]}", "${bins.colorBands[1]}", "${bins.colorBands[2]}", "${bins.colorBands[3]}", "resistor${binsStatus.count}")
+														</script>
+														<div class="progress">
+															<div class="progress-bar progress-bar-striped active" role="progressbar" style="width:${(bins.count / inventories.binCapacity)*100}%">
+																<b>
+																	<font color="#111111">
+																			<span><script>document.write(${(bins.count / inventories.binCapacity)*100}.toFixed(2));</script>% Full</span>
+																	</font>
+																</b>
+															</div>
+														</div>
+														<input type= "hidden" name= "bin_id" value= "${bins.bin_id}">
+														<input type="Submit" name="addResistors" value="Add">
+														<input type="number" min="1" max="${max_count}"name="countChange" size="12" value="1" />
+														<input type="Submit" name="removeResistors" value="Remove">
 													</div>
-												</div>
-												<input type= "hidden" name= "bin_id" value= "${bins.bin_id}">
-												<input type="Submit" name="addResistors" value="Add">
-												<input type="number" min="1" max="${max_count}"name="countChange" size="12" value="1" />
-												<input type="Submit" name="removeResistors" value="Remove">
-												
-											</div>
-										</c:if>
-										</form>
-									</c:forEach>
+												</form>
+											</c:if>
+										</c:forEach>
 									</div>
 								</div>
-							</div><span class="rackDesc"><br>Tolerance: ${racks.tolerance}<br>Power Rating: ${racks.wattage}</span>
+							</div>
 							<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-													<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
-												</form>
+								<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
+							</form>
 						</li>
 					</c:if>
 				</c:forEach>
 				<li class="grey">
 				<!-- need a form for every inventory so that input fields are duplicated -->
 				<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-					<div class="popup" onclick="toggleRack(${inventoriesStatus.count})"> <div class="button" id= "rackB" >Add Rack</div>
+					<div class="popup"> 
+					<div class="button" id= "rackB" onclick="toggleInventory(${inventoriesStatus.count})">Add Rack</div>
 						<input type= "hidden" name= "popup_id" value= "${inventoriesStatus.count}">
-							<div class="popuptext" id="rackPopup${inventoriesStatus.count}">
+							<div class="popuptext" id="inventoryPopup${inventoriesStatus.count}">
 							<div>
-										<input type= "hidden" name= "inventory_id" value= "${inventories.inventory_id}">
-										<span>Tolerance: </span><br>
-										<input type="number" min="1" max="25" name="tolerance" size="12"/><br>
-										<span>Power: </span>
-										<input type="number" min="0.05" step="0.01" name="power" size="12"/>
-										<input type="Submit" name="addRack" value="Add Rack!">
-								
-									
+								<input type= "hidden" name= "inventory_id" value= "${inventories.inventory_id}">
+								<span>Tolerance: </span><br>
+								<input type="number" min="1" max="25" name="tolerance" size="12"/><br>
+								<span>Power: </span>
+								<input type="number" min="0.05" step="0.01" name="power" size="12"/>
+								<input type="Submit" name="addRack" value="Add Rack!">
 							</div>
 						</div>
 					</div>
@@ -445,7 +443,6 @@ function drawResistor(){
 		</div>								
 		</c:forEach>
 		</div>
-	
 	</div>
 	</body>
 
