@@ -4,7 +4,7 @@
 
 
 <html>
-	<head>
+	<head>	
 	<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>View Inventory</title>
 
@@ -24,6 +24,10 @@
 	    box-sizing: border-box;
 	}
 	
+	html{
+		overflow: -moz-scrollbars-vertical; 
+    	overflow-y: scroll;
+	}
 	.columns {
 		
 	    float: left;
