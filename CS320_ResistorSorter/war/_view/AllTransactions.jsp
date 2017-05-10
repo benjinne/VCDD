@@ -9,16 +9,16 @@ All work seen in here has been copied, but modified from the Library example -->
 	<head>
 		<link rel="icon" href="_view/images/favicon.ico" type="image/x-icon">
 		<title>Profile</title>
+		
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link href= "_view/css/styles.css" rel= "stylesheet" type= "text/css">
+		<link rel="stylesheet" href="_view/css/tableThemes/blue/style.css" type="text/css" media="print, projection, screen" />
 		
-		<script type="text/javascript" src="_view/javaScript/jquery-latest.js"></script> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
  		<script type="text/javascript" src="_view/javaScript/jquery.tablesorter.min.js"></script>
-  		<link rel="stylesheet" href="_view/css/tableThemes/blue/style.css" type="text/css" media="print, projection, screen" />
-		
-		
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  		
 	</head>
 
 	<body>

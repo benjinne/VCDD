@@ -9,13 +9,12 @@
 		<title>View Inventory</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
 		<link href= "_view/css/styles.css" rel= "stylesheet" type= "text/css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+
 		
 
   <style type="text/css">
@@ -334,12 +333,12 @@ function drawResistor(){
 					<strong>Error: </strong>${errorMessage}
 				</div>
 			</c:if>
-			<div> 
+			<h4> 
 				InventoryName: <input type="text" name ="inventoryName" size="12">
-				Bin Capacity: <input type="text" name ="binCapacity" size="12">
-				Remove Limit: <input type="text" name ="userRemoveLimit" size="12">
+				BinCapacity: <input type="text" name ="binCapacity" size="12">
+				RemoveLimit: <input type="text" name ="userRemoveLimit" size="12">
 				<input class="btn btn-primary" type="Submit" name="addInventory" value="Add Inventory">
-			</div>
+			</h4>
 		</form>
 		<div class= "row" id= "myContainer">
 			<c:forEach items="${inventories}" var="inventories" varStatus="inventoriesStatus"> 								
@@ -358,7 +357,15 @@ function drawResistor(){
 				<c:forEach items="${racks}" var="racks" varStatus="racksStatus">
 					<c:if test="${inventories.inventory_id == racks.inventory_id}">
 						<li>
-							<span class="rackDesc"><br>Tolerance: ${racks.tolerance}%<br>Power Rating: ${racks.wattage}W</span>
+							
+							<div align="right">
+								<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
+									<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
+								</form>
+							</div>
+							<h1>Rack</h1>
+							
+							<span class="rackDesc">Tolerance: ${racks.tolerance}%<br>Power Rating: ${racks.wattage}W<br></span>
 							<div class= "priceHead dropdown">
 								<div class="dropdown">
 								<div class="popup">
@@ -414,9 +421,6 @@ function drawResistor(){
 									</div>
 								</div>
 							</div>
-							<form action="${pageContext.servletContext.contextPath}/TestViewInventory" method="post">
-								<button class="glyphicon glyphicon-trash" type="submit" name="deleteRack" value="${racks.rack_id}"></button>
-							</form>
 						</li>
 					</c:if>
 				</c:forEach>
